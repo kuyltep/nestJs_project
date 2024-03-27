@@ -23,11 +23,4 @@ export class AuthController {
   login(@Body() dto: LoginUserDTO): Promise<AuthUserResponse> {
     return this.authService.loginUser(dto);
   }
-
-  @UseGuards(JwtAuthGuard)
-  @ApiHeader({ required: true, name: 'Bearer' })
-  @Post('test')
-  test() {
-    return true;
-  }
 }

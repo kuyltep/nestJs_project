@@ -5,6 +5,7 @@ import * as bcrypt from 'bcrypt';
 import { CreateUserDTO } from './dto/createUserDTO';
 import { Repository } from 'sequelize-typescript';
 import { AppError } from 'src/common/constants/errors';
+import { UpdateUserDTO } from './dto/updateUserDTO';
 
 @Injectable()
 export class UserService {
@@ -31,5 +32,29 @@ export class UserService {
     };
     this.userRepository.create(userObject);
     return dto;
+  }
+  async publicUser(email: string) {
+    return await this.userRepository.findOne({
+      where: { email },
+      attributes: {
+        exclude: ['password'],
+      },
+    });
+  }
+  async updateUser(email: string, dto: UpdateUserDTO): Promise<UpdateUserDTO> {
+    await this.userRepository.update(dto, {
+      where: {
+        email,
+      },
+    });
+    return dto;
+  }
+
+  async deleteUser(email: string) {
+    return await this.userRepository.destroy({
+      where: {
+        email,
+      },
+    });
   }
 }
