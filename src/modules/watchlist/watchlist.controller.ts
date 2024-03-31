@@ -2,8 +2,6 @@ import {
   Body,
   Controller,
   Delete,
-  Get,
-  Patch,
   Post,
   Query,
   Req,
