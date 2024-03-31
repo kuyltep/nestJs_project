@@ -12,7 +12,13 @@ import {
 import { WatchlistService } from './watchlist.service';
 import { JwtAuthGuard } from '../guards/jwt.guard';
 import { WathclistDTO } from './dto/watchlist.dto';
-import { ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiQuery,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 @ApiTags('Watchlist')
 @Controller('watchlist')
@@ -28,23 +34,11 @@ export class WatchlistController {
     return this.watchlistService.createAsset(assetDto, user);
   }
 
-  @ApiResponse({ status: 200 })
-  @UseGuards(JwtAuthGuard)
-  @Get('get-all')
-  getAllAssets(@Req() request) {
-    const user = request.user;
-    return this.watchlistService;
-  }
-
-  @UseGuards(JwtAuthGuard)
-  @Patch('update')
-  updateAsset() {
-    return this.watchlistService;
-  }
-
+  @ApiBearerAuth('JWT-auth')
   @UseGuards(JwtAuthGuard)
   @Delete()
-  deleteAsset(@Query('id') id: string) {
-    return this.watchlistService;
+  deleteAsset(@Query('id') assetId: string, @Req() request) {
+    const { id: userId } = request.user;
+    return this.watchlistService.deleteAsset(+assetId, +userId);
   }
 }
