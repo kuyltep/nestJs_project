@@ -4,8 +4,8 @@ import { User } from './models/user.model';
 import * as bcrypt from 'bcrypt';
 import { CreateUserDTO } from './dto/createUserDTO';
 import { Repository } from 'sequelize-typescript';
-import { AppError } from 'src/common/constants/errors';
 import { UpdateUserDTO } from './dto/updateUserDTO';
+import { Watchlist } from '../watchlist/models/watchlist.model';
 
 @Injectable()
 export class UserService {
@@ -38,6 +38,10 @@ export class UserService {
       where: { email },
       attributes: {
         exclude: ['password'],
+      },
+      include: {
+        model: Watchlist,
+        required: false,
       },
     });
   }
