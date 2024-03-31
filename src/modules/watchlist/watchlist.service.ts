@@ -16,21 +16,29 @@ export class WatchlistService {
     assetDto: WathclistDTO,
     user,
   ): Promise<CreateAssetResponse> {
-    const watchlist = {
-      name: assetDto.name,
-      assetId: assetDto.assetId,
-      user: +user.id,
-    };
-    return await this.watchlistRepository.create(watchlist);
+    try {
+      const watchlist = {
+        name: assetDto.name,
+        assetId: assetDto.assetId,
+        user: +user.id,
+      };
+      return await this.watchlistRepository.create(watchlist);
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
   async deleteAsset(assetId: number, userId: number): Promise<boolean> {
-    await this.watchlistRepository.destroy({
-      where: {
-        id: assetId,
-        user: userId,
-      },
-    });
-    return true;
+    try {
+      await this.watchlistRepository.destroy({
+        where: {
+          id: assetId,
+          user: userId,
+        },
+      });
+      return true;
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 }
