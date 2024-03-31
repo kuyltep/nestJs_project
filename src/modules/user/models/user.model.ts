@@ -1,13 +1,5 @@
-import { ApiBody, ApiProperty } from '@nestjs/swagger';
-import {
-  Column,
-  Model,
-  Table,
-  ForeignKey,
-  BelongsTo,
-  PrimaryKey,
-  AutoIncrement,
-} from 'sequelize-typescript';
+import { Column, Model, Table, HasMany } from 'sequelize-typescript';
+import { Watchlist } from 'src/modules/watchlist/models/watchlist.model';
 
 @Table
 export class User extends Model<User> {
@@ -22,4 +14,10 @@ export class User extends Model<User> {
 
   @Column
   password: string;
+
+  @HasMany(() => Watchlist, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
+  watchlists: Watchlist[];
 }

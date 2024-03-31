@@ -20,7 +20,7 @@ export class AuthService {
     }
     return await this.userService.createUser(dto);
   }
-  async loginUser(dto: LoginUserDTO): Promise<AuthUserResponse> {
+  async loginUser(dto: LoginUserDTO): Promise<any> {
     const user = await this.userService.findUserByEmail(dto.email);
     if (!user) {
       throw new BadRequestException(AppError.USER_NOT_EXIST);
@@ -29,12 +29,8 @@ export class AuthService {
     if (!isPasswordCorrect) {
       throw new BadRequestException(AppError.WRONG_DATA);
     }
-    const userData = {
-      email: user.email,
-      name: user.firstName,
-    };
-    const jwtToken = await this.tokenService.generateUserJwt(userData);
     const publicUser = await this.userService.publicUser(dto.email);
-    return { ...publicUser, token: jwtToken };
+    const jwtToken = await this.tokenService.generateUserJwt(publicUser);
+    return { publicUser, token: jwtToken };
   }
 }
